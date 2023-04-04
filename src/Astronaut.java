@@ -58,6 +58,7 @@ public class Astronaut {
         ypos = ypos + dy;
         rec = new Rectangle(xpos,ypos,height,width);
 
+
     }
     public void bounce(){
         if (xpos>940){
@@ -77,6 +78,12 @@ public class Astronaut {
         rec = new Rectangle(xpos,ypos,height,width);
 
     }
+    public void wrap(){
+        for(int x=0; x<1001; x++){
+Astronaut.dx= x;
+x++;
+if(Astronaut.dx >height){
+Astronaut.dx=0;
 }
 
 

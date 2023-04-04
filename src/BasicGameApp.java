@@ -13,16 +13,17 @@
 
 //Graphics Libraries
 import java.awt.Graphics2D;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
+//
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
 	//Variable Definition Section
 	//Declare the variables used in the program
@@ -48,6 +49,7 @@ public class BasicGameApp implements Runnable {
 
 	//Declare the objects used in the program
 	//These are things that are made up of more than one variable type
+	//declaring there is a array with []
 	private Astronaut holly;
 	private Astronaut steffy;
 	private Astronaut bart;
@@ -68,7 +70,7 @@ public class BasicGameApp implements Runnable {
 	public BasicGameApp() {
 
 		setUpGraphics();
-
+		canvas.addKeyListener(this);
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
 		background = Toolkit.getDefaultToolkit().getImage("FEELD.jpg");
@@ -77,18 +79,18 @@ public class BasicGameApp implements Runnable {
 		steffypic = Toolkit.getDefaultToolkit().getImage("steffythegoat.png");
 		bartpic = Toolkit.getDefaultToolkit().getImage("bart.png");
 		jerrypic = Toolkit.getDefaultToolkit().getImage("jerry.PNG");
-		holly = new Astronaut(100, 450);
-		steffy = new Astronaut(100, 550);
-		bart = new Astronaut(100, 330);
-		jerry = new Astronaut(200, 210);
+		holly = new Astronaut(100, 100);
+		steffy = new Astronaut(100, 600);
+		bart = new Astronaut(500, 330);
+		jerry = new Astronaut(200, 400);
 		holly.dy = 1;
 		holly.dx = 1;
 		steffy.dx = 7;
-		steffy.dy = 1;
+		steffy.dy = 9;
 		bart.dx = 1;
-		bart.dy = 1/3;
+		bart.dy = 1 / 3;
 		jerry.dx = 3;
-		jerry.dy = 2/7;
+		jerry.dy = 2 / 7;
 
 
 	}// BasicGameApp()
@@ -96,35 +98,38 @@ public class BasicGameApp implements Runnable {
 
 //*******************************************************************************
 
+	public void run() {
 
-		public void run() {
+		//for the moment we will loop things forever.
+		while (true) {
 
-			//for the moment we will loop things forever.
-			while (true) {
-
-				moveThings();  //move all the game objects
-				render();  // paint the graphics
-				pause(10);
+			moveThings();  //move all the game objects
+			render();  // paint the graphics
+			pause(10);
 
 
-			}
+
 		}
-			public void crash() {
+	}
 
-				if (bart.rec.intersects(steffy.rec) && bart.isAlive == true && steffy.isAlive == true) {
-					System.out.println("crash");
-					steffy.dx = -1 * steffy.dx;
-					steffy.dy = -steffy.dy;
-					bart.dx = -1 * bart.dx;
-					bart.dy = -bart.dy;
-					//steffy.isAlive = false;
-					bartpic = steffypic;
-				}
-			}
+
+	public void crash() {
+
+		if (bart.rec.intersects(steffy.rec) && bart.isAlive == true && steffy.isAlive == true) {
+			System.out.println("crash");
+			steffy.dx = -1 * steffy.dx;
+			steffy.dy = -steffy.dy;
+			bart.dx = -1 * bart.dx;
+			bart.dy = -bart.dy;
+			//steffy.isAlive = false;
+			bartpic = steffypic;
+		}
+	}
+
 	public void moveThings() {
 		//calls the move( ) code in the objects
-		holly.move();
-		holly.bounce();
+		//holly.move();
+		//holly.bounce();
 		bart.bounce();
 		bart.move();
 		steffy.move();
@@ -132,8 +137,13 @@ public class BasicGameApp implements Runnable {
 		jerry.move();
 		jerry.bounce();
 		crash();
+		steffy.wrap();
 
 	}
+
+
+
+
 
 	//Pauses or sleeps the computer for the amount specified in milliseconds
 	public void pause(int time) {
@@ -161,6 +171,10 @@ public class BasicGameApp implements Runnable {
 
 
 		panel.add(canvas);  // adds the canvas to the panel.
+		canvas.addKeyListener(this);
+		canvas.addMouseListener(this);
+		canvas.addMouseMotionListener(this);
+
 
 		// frame operations
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
@@ -183,23 +197,116 @@ public class BasicGameApp implements Runnable {
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 
 
+		g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
+		//g.drawImage(troffpic,10,400, 100, 50, null);
+		for (int i = 0; i <troff.length; i++) {
+			g.drawImage(troffpic,troff[i].xpos, troff[i].ypos, troff[i].width, troff[i].height, null);
+		}
+		g.drawImage(hollypic, holly.xpos, holly.ypos, holly.width, holly.height, null);
+		if (bart.isAlive == true) {
+			g.drawImage(steffypic, steffy.xpos, steffy.ypos, steffy.width, steffy.height, null);
+		}
+		g.drawImage(bartpic, bart.xpos, bart.ypos, bart.width, bart.height, null);
+		g.drawImage(jerrypic, jerry.xpos, jerry.ypos, jerry.width, jerry.height, null);
+		if (bart.isAlive == true) {
+			g.drawImage(steffypic, steffy.xpos, steffy.ypos, steffy.width, steffy.height, null);
+		}
+		bufferStrategy.show();
+	}
 
 
-			g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-			g.drawImage(troffpic,3,450,100,50,null);
-			g.drawImage(hollypic, holly.xpos, holly.ypos, holly.width, holly.height, null);
-			if (bart.isAlive == true)
-			{g.drawImage(steffypic, steffy.xpos, steffy.ypos, steffy.width, steffy.height, null);}
-			g.drawImage(bartpic, bart.xpos, bart.ypos, bart.width, bart.height, null);
-			g.drawImage(jerrypic, jerry.xpos, jerry.ypos, jerry.width, jerry.height, null);
-			if (bart.isAlive == true)
-			{	g.drawImage(steffypic, steffy.xpos, steffy.ypos, steffy.width, steffy.height, null);}
-			bufferStrategy.show();
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int code = e.getKeyCode();
+		System.out.println(code);
+		if (code == 83) ;
+		pause(6);
+		holly.dy = -20;
+
+		if (code == 68) ;
+		holly.dx = 10;
+
+		if (code == 65)
+			holly.xpos = holly.xpos + 3;
+		if (code == 87)
+			holly.ypos = holly.ypos + 3;
+
+		//if (code )
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		System.out.println(e.getX());
+
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		holly.xpos = e.getX();
+		holly.ypos = e.getY();
+		holly.width = holly.width * 2;
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		holly.width = 80;
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		holly.xpos = e.getX();
+		holly.ypos = e.getY();
+		holly.width = 200;
+
+	}
+
+	public BufferStrategy getBufferStrategy() {
+		return bufferStrategy;
+	}
+
+	public Troff[] troff;
+	//	public static void main (String [] args)
+	{
+		troff = new Troff[5];
+		for (int i = 0; i <troff.length; i++) {
+			troff[i] = new Troff((int) (Math.random() * 700) + 10, 500);
+
+
 		}
 
 
 
-
-			}
+	}
+}
 
 
