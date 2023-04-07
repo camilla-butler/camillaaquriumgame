@@ -116,7 +116,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public void crash() {
 
 		if (bart.rec.intersects(steffy.rec) && bart.isAlive == true && steffy.isAlive == true) {
-			System.out.println("crash");
+			System.out.println("steffy and bart just crashed");
 			steffy.dx = -1 * steffy.dx;
 			steffy.dy = -steffy.dy;
 			bart.dx = -1 * bart.dx;
@@ -127,19 +127,22 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	}
 
 	public void moveThings() {
-		//calls the move( ) code in the objects
-		//holly.move();
-		//holly.bounce();
-		bart.bounce();
-		bart.move();
-		steffy.move();
-		steffy.bounce();
-		jerry.move();
-		jerry.bounce();
-		crash();
-		steffy.wrap();
+			//calls the move( ) code in the objects
+		//	holly.move();
+			//holly.bounce();
+			bart.bounce();
+			bart.move();
+			steffy.move();
+			steffy.bounce();
+			jerry.move();
+	    	//jerry.bounce();
+			jerry.wrap();
 
-	}
+			crash();
+			crash2();
+
+		}
+
 
 
 
@@ -203,7 +206,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 			g.drawImage(troffpic,troff[i].xpos, troff[i].ypos, troff[i].width, troff[i].height, null);
 		}
 		g.drawImage(hollypic, holly.xpos, holly.ypos, holly.width, holly.height, null);
-		if (bart.isAlive == true) {
+		if (holly.isAlive == true) {
 			g.drawImage(steffypic, steffy.xpos, steffy.ypos, steffy.width, steffy.height, null);
 		}
 		g.drawImage(bartpic, bart.xpos, bart.ypos, bart.width, bart.height, null);
@@ -226,17 +229,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
 		System.out.println(code);
-		if (code == 83) ;
-		pause(6);
-		holly.dy = -20;
-
-		if (code == 68) ;
-		holly.dx = 10;
 
 		if (code == 65)
-			holly.xpos = holly.xpos + 3;
+			holly.xpos = holly.xpos -3;
 		if (code == 87)
-			holly.ypos = holly.ypos + 3;
+			holly.ypos = holly.ypos - 3;
+		if (code == 68)
+			holly.xpos = holly.xpos +3;
+		if (code == 83)
+			holly.ypos = holly.ypos +3;
+
 
 		//if (code )
 	}
@@ -307,6 +309,17 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
 
 
 	}
-}
+	public void crash2() {
 
+		if (holly.rec.intersects (jerry.rec) && holly.isAlive == true && jerry.isAlive == true) {
+
+			jerry.dx = -1 * jerry.dx;
+			jerry.dy = -jerry.dy;
+			holly.dx = -1 * holly.dx;
+			holly.dy = -holly.dy;
+			System.out.println("holly just hit jerry!");
+		}
+
+		}
+	}
 

@@ -78,14 +78,16 @@ public class Astronaut {
         rec = new Rectangle(xpos,ypos,height,width);
 
     }
-    public void wrap(){
-        for(int x=0; x<1001; x++){
-Astronaut.dx= x;
-x++;
-if(Astronaut.dx >height){
-Astronaut.dx=0;
-}
+    public void wrap() {
+        if (xpos > 1000) {
+            xpos = 0;
+        }
+        xpos = xpos + dx;
+        ypos = ypos + dy;
+        rec = new Rectangle(xpos,ypos,height,width);
 
+
+    }}
 
 
 
